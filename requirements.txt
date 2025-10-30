@@ -7,7 +7,8 @@ speedtest-cli
 Flask
 aiofiles
 pyrofork
-pyromod==1.5
+pyrogram==1.4.16
+tgcrypto==1.2.5
 #https://github.com/DrWix007/pyrogram/archive/refs/heads/master.zip
 pymongo
 telegraph

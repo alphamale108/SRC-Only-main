@@ -1,10 +1,25 @@
-FROM python:3.9-slim-bullseye
+FROM python:3.11-slim-bullseye
 
 RUN mkdir /app && chmod 777 /app
 WORKDIR /app
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt -qq update && apt -qq install -y git python3 python3-pip ffmpeg
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    ffmpeg \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+
+# Upgrade pip and install Python dependencies
+RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt
+
+# Copy the rest of the application
 COPY . .
-# Install compatible Pyrogram version before requirements
-RUN pip3 install "pyrogram==1.4.16" && pip3 install -r requirements.txt
-CMD gunicorn app:app & python -m main
+
+# Fix for Heroku - use the port provided by Heroku
+CMD gunicorn --bind 0.0.0.0:$PORT app:app & python -m main

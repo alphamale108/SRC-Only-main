@@ -1,4 +1,4 @@
-pyromod==3.1.1
+pyromod==1.2.1
 psutil
 opencv-python-headless
 python-dotenv
